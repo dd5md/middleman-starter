@@ -1,16 +1,21 @@
 source 'https://rubygems.org'
 
-gem 'middleman', '~> 4.2'
-gem 'middleman-autoprefixer', '~> 2.7'
+# Middleman
+gem 'middleman',              '~> 4.5'
+gem 'middleman-autoprefixer', '~> 3.0'
 gem 'middleman-livereload'
-
 gem 'middleman-minify-html'
-gem 'middleman-imageoptim', :git => 'https://github.com/plasticine/middleman-imageoptim'
-gem 'middleman-critical', '~>0.0.2'
+gem 'middleman-robots',       '1.3.0'
+
+# Critical CSS
+gem 'middleman-critical',     '~>0.0.2'
 gem 'middleman-transpath'
+gem 'middleman-sitemap',      git: 'https://github.com/bastienrobert/middleman-sitemap'
+gem 'middleman-imageoptim',   git: 'https://github.com/plasticine/middleman-imageoptim'
 
-gem 'middleman-sitemap', :git => 'https://github.com/bastienrobert/middleman-sitemap'
-gem 'middleman-robots', '1.3.0'
+# Build Pipeline Gems
+gem 'yui-compressor'
+gem 'terser', '~> 1.1'
 
-gem 'tzinfo-data', platforms: [:mswin, :mingw, :jruby]
-gem 'wdm', '~> 0.1', platforms: [:mswin, :mingw]
+# Windows Support
+gem 'wdm' if Gem.win_platform?
