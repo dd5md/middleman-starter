@@ -96,7 +96,8 @@ configure :build do
   # Gzip
   activate :gzip
   # Critical CSS
-  activate :critical, binary: '/usr/local/bin/critical'
+  # activate :critical, binary: '/usr/local/bin/critical'
+  activate :critical, binary: '/Users/md/.nvm/versions/node/v18.20.2/bin/critical'
   # SEO
   activate :sitemap, gzip: false, hostname: config[:host]
   # Robots
