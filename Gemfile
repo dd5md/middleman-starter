@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
 # Middleman
-gem 'middleman',              '~> 4.5'
-gem 'middleman-autoprefixer', '~> 3.0'
+gem 'middleman',              '~>4.5'
+gem 'middleman-autoprefixer', '~>3.0'
+gem 'middleman-robots',       '1.3.7'
 gem 'middleman-livereload'
 gem 'middleman-minify-html'
-gem 'middleman-robots',       '1.3.0'
 
 # Critical CSS
 gem 'middleman-critical',     '~>0.0.2'
