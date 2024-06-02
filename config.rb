@@ -1,77 +1,108 @@
-# Activate and configure extensions
-# https://middlemanapp.com/advanced/configuration/#configuring-extensions
+#-----------------------------------
+# Extension-specific Configuration
+#-----------------------------------
 
+# Autoprefixer
 activate :autoprefixer do |prefix|
-  prefix.browsers = "last 2 versions"
+  prefix.browsers = 'last 2 versions'
 end
 
 # Pretty URLs
 activate :directory_indexes
+
 # Localization
-activate :i18n, :mount_at_root => :fr
-# Using asset helpers
+activate :i18n, :mount_at_root => :de
+
+# Asset Helpers
 activate :asset_hash
-# Using transpath helpers
+
+# Transpath Helpers
 activate :transpath
 
-# Layouts
-# https://middlemanapp.com/basics/layouts/
+#-----------------------------------
+# Layout-specific Configuration
+#-----------------------------------
 
-# Per-page layout changes
-page '/*.xml', layout: false
-page '/*.json', layout: false
-page '/*.txt', layout: false
+page '/*.xml',      layout: false
+page '/*.txt',      layout: false
+page '/*.json',     layout: false
 page 'sitemap.xml', layout: false
 
-# With alternative layout
-# page '/path/to/file.html', layout: 'other_layout'
+#-----------------------------------
+# Helper-specific Configuration
+#-----------------------------------
 
-# Proxy pages
-# https://middlemanapp.com/advanced/dynamic-pages/
+Dir['helpers/*.rb'].each {|file| require file }
 
-# proxy(
-#   '/this-page-has-no-template.html',
-#   '/template-file.html',
-#   locals: {
-#     which_fake_page: 'Rendering a fake page with a local variable'
-#   },
-# )
-
-# Helpers
-# Requires all helpers
-Dir["helpers/*.rb"].each {|file| require file }
-# Methods defined in the helpers block are available in templates
-# https://middlemanapp.com/basics/helper-methods/
 helpers ApplicationHelper
 
-# Middleman fails to reload on helpers edit. This is the solution.
 Dir['helpers/*'].each(&method(:load))
 
+#-----------------------------------
+# Server-specific Configuration
+#-----------------------------------
 
-# Build-specific configuration
-# https://middlemanapp.com/advanced/configuration/#environment-specific-settings
-
-configure :development do
-  config[:host] = "http://localhost:4567"
-  activate :livereload
+configure :server do
+  # Debug Assets
+  config[:debug_assets] = true
+  # Port
+  config[:port] = '7001'
+  # Host
+  config[:host] = 'http://localhost:7001'
+  # Livereload
+  activate :livereload, no_swf: true
 end
 
+#-----------------------------------
+# Build-specific configuration
+#-----------------------------------
+
 configure :build do
-  config[:host] = "https://bastienrobert.fr"
-
-  activate :minify_html
+  # Config Host
+  config[:host] = 'https://dd5md.de'
+  # Config URL_ROOT
+  config[:url_root] = 'https://dd5md.de'
+  # Minify CSS on Build
   activate :minify_css
-  activate :minify_javascript
+  # Minify JS on Build
+  activate :minify_javascript, compressor: Terser.new
+  # Minify HTML on Build
+  after_configuration do
+    use ::HtmlCompressor::Rack,
+      compress_css: true,
+      compress_javascript: true,
+      css_compressor: :yui,
+      enabled: true,
+      javascript_compressor: :yui,
+      preserve_line_breaks: false,
+      preserve_patterns: [],
+      remove_comments: true,
+      remove_form_attributes: false,
+      remove_http_protocol: false,
+      remove_https_protocol: false,
+      remove_input_attributes: true,
+      remove_intertag_spaces: true,
+      remove_javascript_protocol: true,
+      remove_link_attributes: true,
+      remove_multi_spaces: true,
+      remove_quotes: true,
+      remove_script_attributes: true,
+      remove_style_attributes: true,
+      simple_boolean_attributes: true,
+      simple_doctype: false
+  end
+  # Image Optim
   activate :imageoptim
+  # Gzip
   activate :gzip
-  activate :critical, :binary => '/usr/local/bin/critical'
-
+  # Critical CSS
+  activate :critical, binary: '/usr/local/bin/critical'
   # SEO
-  activate :sitemap, :gzip => false, :hostname => config[:host]
+  activate :sitemap, gzip: false, hostname: config[:host]
   # Robots
   activate :robots,
     :rules => [
-      {:user_agent => '*', :allow => %w(/)}
+      {user_agent: '*', allow: %w(/)}
     ],
-    :sitemap => config[:host] + "/sitemap.xml"
+    sitemap: config[:host] + '/sitemap.xml'
 end
